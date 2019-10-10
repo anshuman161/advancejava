@@ -80,7 +80,6 @@ public class UserInformation
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "userId")
-	@SortComparator(NotesSorting.class)
 	private List<NoteDetails> note ;
 
 	public List<NoteDetails> getNote() 
