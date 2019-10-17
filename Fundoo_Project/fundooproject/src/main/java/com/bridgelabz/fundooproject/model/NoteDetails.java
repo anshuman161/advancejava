@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "note_details")
 public class NoteDetails {
@@ -92,20 +94,9 @@ public class NoteDetails {
 		this.isTrash = isTrash;
 	}
     
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name = "Labels_Notes", 
-    joinColumns = { @JoinColumn(name = "noteId") }, 
-    inverseJoinColumns = { @JoinColumn(name = "labelId") })
+	@ManyToMany(cascade=CascadeType.ALL) 
+    @JoinColumn(name="noteId")
 	private List<LabelDetails> labelList;
 
-	public List<LabelDetails> getLabelList() 
-	{
-		return labelList;
-	}
-
-	public void setLabelList(List<LabelDetails> labelList) {
-		this.labelList = labelList;
-	}
-	
 	
 }

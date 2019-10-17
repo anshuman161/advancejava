@@ -1,6 +1,7 @@
 package com.bridgelabz.fundooproject.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bridgelabz.fundooproject.model.NoteDetails;
-import com.bridgelabz.fundooproject.model.NoteDto;
 import com.bridgelabz.fundooproject.model.UserInformation;
 
 @Repository
@@ -18,13 +18,12 @@ public class NoteRepositryImpl implements Note
 {
 	@Autowired
 	private EntityManager entity;
-
+ 	
 	@Override
-	public boolean save(NoteDetails details) 
+	public void save(NoteDetails details) 
 	{
 		Session session = entity.unwrap(Session.class);
 		session.save(details);
-		return true;
 	}
 	@Override
 	public UserInformation findById(long userId) 
@@ -59,14 +58,19 @@ public class NoteRepositryImpl implements Note
 		
 	}
 	@Override
-	public int sortingNotes(Long id) 
+	public List<NoteDetails> fetchNotesByUserId(long id) 
 	{
-		Session session = entity.unwrap(Session.class);
-		
-		
-	//	query.setParameter("id", id);
-		return 0;//query.executeUpdate();
-		
-	}
+		Session session= entity.unwrap(Session.class);
+		List<NoteDetails> notelist= session.createQuery("from NoteDetails where user_id='"+id+"'").getResultList();	
+	   return notelist;
+	 }
+	
+	
+	/*
+	 * @Override public int sortingNotes(Long id) { Session session =
+	 * entity.unwrap(Session.class);
+	 * // query.setParameter("id", id); return 0;//query.executeUpdate();
+	 * }
+	 */
 
 }

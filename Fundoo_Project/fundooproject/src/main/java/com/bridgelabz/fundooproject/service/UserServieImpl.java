@@ -58,8 +58,7 @@ public class UserServieImpl implements UserService
 	{
 		Long id = (long) util.parseToken(token);
 		if (id != null) {
-			user.saveVerfied(id);
-			
+			user.saveVerfied(id);	
 		} 
 		else 
 		{
@@ -68,26 +67,27 @@ public class UserServieImpl implements UserService
 	}
 	@Transactional
 	@Override
-	public boolean getLogIn(UserLogIn login) {
+	public String getLogIn(UserLogIn login) {
 		UserInformation userInfo = user.getUser(login.getEmail());
-		if (userInfo != null) 
+		String token=null;
+		if (userInfo.isVerified()==true) 
 		{
 			if (bcrypt.matches(login.getPassword(), userInfo.getPassword()) ) 
 			{
-			   	return true;
+			   	token=util.generateTokens(userInfo.getUserId());
+			   	return token;
 			} else 
 			{
-			//	logger.info("Password is mismatched!!");
-				return false;
+				 throw new UserException("Password is wrong!!!");
 			}
 		} else {
+			util.sendMail(login.getEmail(), "Email verifying", "http://localhost:8080/user/verify/"+util.generateTokens(userInfo.getUserId()));
 			 throw new UserException("User Not Exist");
 		}
 	}
 	@Transactional
 	@Override
 	public boolean forgetPassword(String email) {
-		System.out.println("00000000000");
 		UserInformation info = user.getUser(email);
 		if (info != null) {
 			util.sendMail(info.getEmail(), "Reset Password","http://localhost:4200/changePassword/" + util.generateTokens(info.getUserId()));

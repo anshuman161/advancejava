@@ -3,6 +3,7 @@ package com.bridgelabz.fundooproject.utilmethods;
 public class Response {
    private String messege;
    private int status;
+   private Object object;
 public String getMessege() {
 	return messege;
 }
@@ -15,11 +16,16 @@ public int getStatus() {
 public void setStatus(int status) {
 	this.status = status;
 }
+
+
+public Object getObject() {
+	return object;
+}
 public Response(String messege, int status,Object object) {
 
 	this.messege = messege;
 	this.status = status;
-	
+	this.object = object;
 }
    
 }

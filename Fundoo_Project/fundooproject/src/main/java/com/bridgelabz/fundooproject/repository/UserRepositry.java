@@ -43,7 +43,6 @@ public class UserRepositry implements User
 	public boolean changePassword(UserResetPasswordDto password, Long userId)
 	{
 		Session session = entityManager.unwrap(Session.class);
-		System.out.println("111111111111");
         Query query=session.createQuery("update UserInformation set password=:password where userId=:userId");
 		query.setParameter("password", password.getConfirmPassword());
 		query.setParameter("userId", userId);

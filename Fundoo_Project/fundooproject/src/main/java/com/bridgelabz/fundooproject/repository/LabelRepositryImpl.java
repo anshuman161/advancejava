@@ -1,5 +1,7 @@
 package com.bridgelabz.fundooproject.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -35,8 +37,6 @@ public UserInformation findById(long userId)
 	}
 	
 	
-
-	
 	@Override
 	public NoteDetails findNoteById(long id) 
 	{
@@ -68,6 +68,13 @@ public UserInformation findById(long userId)
 	public LabelDetails findLabelById(long labelId) {
 		LabelDetails details= (LabelDetails) entity.unwrap(Session.class).createQuery("from LabelDetails where labelId='"+labelId+"'").uniqueResult();
 	      return details;
+	}
+
+	@Override
+	public List<LabelDetails> fetchAllLabelById(long id)
+	{
+		Session session= entity.unwrap(Session.class);
+		return session.createQuery("from LabelDetails where user_id='"+id+"'").getResultList();		 
 	}
 	
   

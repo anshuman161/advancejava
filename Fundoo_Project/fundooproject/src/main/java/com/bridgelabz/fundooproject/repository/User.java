@@ -12,4 +12,5 @@ public interface User
 	public boolean saveVerfied(long id);
 	
 	public boolean changePassword(UserResetPasswordDto password, Long userId);
+	
 }

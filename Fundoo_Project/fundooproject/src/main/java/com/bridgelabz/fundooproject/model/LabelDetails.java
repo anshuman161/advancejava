@@ -12,9 +12,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
-@Data
+
 @Entity
 @Table(name = "label_list")
 public class LabelDetails 
@@ -26,11 +28,7 @@ public class LabelDetails
 	private long userId;
 
 	
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name = "Labels_Notes", 
-    joinColumns = { @JoinColumn(name = "labelId") }, 
-    inverseJoinColumns = { @JoinColumn(name = "noteId") })
-	private List<NoteDetails> notes;
+	
 
 
 	public long getLabelId() {
@@ -62,16 +60,4 @@ public class LabelDetails
 		this.userId = userId;
 	}
 
-
-	public List<NoteDetails> getNotes() {
-		return notes;
-	}
-
-
-	public void setNotes(List<NoteDetails> notes) {
-		this.notes = notes;
-	}
-
-	
-	
 }

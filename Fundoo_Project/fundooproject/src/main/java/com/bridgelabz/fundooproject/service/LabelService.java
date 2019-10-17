@@ -1,5 +1,7 @@
 package com.bridgelabz.fundooproject.service;
 
+import java.util.List;
+
 import com.bridgelabz.fundooproject.model.LabelDetails;
 
 public interface LabelService {
@@ -11,4 +13,5 @@ public interface LabelService {
 
 	public boolean edit(int labelId, String token);
 	
+	public List<LabelDetails> fetchAllLabel(String token);
 }

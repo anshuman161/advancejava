@@ -8,7 +8,7 @@ public interface UserService
 {
 	public void save(UserDto student);
 
-	public boolean getLogIn(UserLogIn login);
+	public String getLogIn(UserLogIn login);
 
 	public void isVerify(String token);
 

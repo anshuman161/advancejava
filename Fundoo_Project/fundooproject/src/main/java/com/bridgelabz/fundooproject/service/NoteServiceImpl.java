@@ -1,6 +1,7 @@
 package com.bridgelabz.fundooproject.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -13,7 +14,6 @@ import com.bridgelabz.fundooproject.model.NoteDetails;
 import com.bridgelabz.fundooproject.model.NoteDto;
 import com.bridgelabz.fundooproject.model.UserInformation;
 import com.bridgelabz.fundooproject.repository.Note;
-import com.bridgelabz.fundooproject.repository.UserRepositry;
 import com.bridgelabz.fundooproject.utilmethods.Utility;
 
 @Service
@@ -58,37 +58,45 @@ public UserInformation generatingToken(String token) {
 	}
     @Transactional
 	@Override
-	public void updateNotes(NoteDto details,Long id, String token) 
+	public void updateNotes(NoteDetails information, String token) 
 	{
-		NoteDetails note =noteRepositry.findNoteById(id);
-		if (generatingToken(token)!=null && note!=null) 
-		{	
-		note.setTittle(details.getTittle());
-		note.setDescription(details.getDescription());
-		note.setUpdatedTime(LocalDateTime.now());
- 		note.setArchieve(details.isArchieve());
- 		note.setTrash(details.isTrash());
- 		note.setPin(details.isPin());
- 		noteRepositry.save(note);
-		}
-		else 
-		{
-			throw new UserException("Note Not Exist");
+    	try {
+
+			UserInformation user= noteRepositry.findById(utils.parseToken(token));
+
+			NoteDetails note = noteRepositry.findNoteById(information.getNoteId());
+			if (note != null) {
+				System.out.println("note is   " + note);
+				note.setNoteId(information.getNoteId());
+				note.setDescription(information.getDescription());
+				note.setTittle(information.getTittle());
+				note.setPin(information.isPin());
+				note.setArchieve(information.isArchieve());
+				note.setTrash(information.isTrash());
+				note.setUpdatedTime(LocalDateTime.now());
+				noteRepositry.save(note);
+			} else {
+				throw new UserException("note is not present");
+			}
+
+		} catch (Exception e) {
+			throw new UserException("user is not present");
 		}
 		
 	}
     @Transactional
 	@Override
-	public int deleteNotes(Long id, String token) 
+	public long deleteNotes(long noteId, String token) 
     {
 	   
-	   int demo=0;
+	   long demo=0;
 	   if(generatingToken(token)!=null)
 	   {   
-	   NoteDetails note=noteRepositry.findNoteById(id);
-	   if (note!=null)
+	   NoteDetails noteDetails=noteRepositry.findNoteById(noteId);
+	   if (noteDetails!=null)
 	   {
-		  demo= noteRepositry.deleteNotes(id);
+		   System.out.println("inside if block...");
+		  demo=noteRepositry.deleteNotes(noteDetails.getNoteId());
 		  return demo;
 	   }
 	   else 
@@ -98,22 +106,25 @@ public UserInformation generatingToken(String token) {
 	   }
 	return demo;
 	}
-    
-	@Override
-	public void sortNotes(NoteDetails notes, String token) 
-	{
-		
-		 if (generatingToken(token)!=null) 
-		 {	
-			
-		//	UserRepositry.
-			
-			 
-	 	 }  
-		else {
-			   throw new UserException("User is Not Exist");
-		}
-		
+    @Transactional
+    @Override
+	public List<NoteDetails> fetchAllNotes(String token) 
+    {
+    	return noteRepositry.fetchNotesByUserId(utils.parseToken(token));	
 	}
+	/*
+	 * @Override public void sortNotes(NoteDetails notes, String token) {
+	 * 
+	 * if (generatingToken(token)!=null) {
+	 * 
+	 * // UserRepositry.
+	 * 
+	 * 
+	 * } else { throw new UserException("User is Not Exist"); }
+	 * 
+	 * }
+	 */
+
+	
  
 }

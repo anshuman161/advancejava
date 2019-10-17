@@ -1,5 +1,7 @@
 package com.bridgelabz.fundooproject.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,6 @@ public class LabelServiceImpl implements LabelService {
 	@Override
 	public boolean delete(int labelId, String token) 
    {
-	
 		if (generatingToken(token) != null) 
 		{
 			int demo=labelRepositry.deleteLabel(labelId);
@@ -79,7 +80,7 @@ public class LabelServiceImpl implements LabelService {
 		{      
 		    NoteDetails note= labelRepositry.findNoteById(noteId);
 			 LabelDetails label=labelRepositry.findLabelById(labelId);
-		    label.getNotes().add(note);
+		    //label.getNotes().add(note);
 		       labelRepositry.save(label);
 		} 
 		else
@@ -88,6 +89,7 @@ public class LabelServiceImpl implements LabelService {
 		}
 		return false;
 	}
+ @Transactional   
 @Override
 public boolean edit(int labelId, String token) 
 {
@@ -107,6 +109,14 @@ public boolean edit(int labelId, String token)
 	else {
 		throw new UserException("User not exist");
 	}
+}
+@Transactional
+@Override
+public List<LabelDetails> fetchAllLabel(String token) 
+{
+	
+ List<LabelDetails> ldetails= labelRepositry.fetchAllLabelById(utils.parseToken(token));
+ return ldetails;
 }
 	 
 	
